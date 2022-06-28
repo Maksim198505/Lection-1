@@ -3,25 +3,26 @@
 # (Используйте - для обозначения зачеркнутой буквы)
 # Input: bbananana
 
-def bananas(s, word):
-    ret = []
-    if word == '':
-        ret.append(''.rjust(len(s), '-'))
-        return ret
+from itertools import combinations as combos
 
-    left_s = ''
-    for si in range(len(s)):
-        if word[0] == s[si]:
-            left_s = ''.rjust(si, '-') + s[si]
-            if s[si + 1:] == '' and word[1:] == '':
-                ret.append(left_s)
+
+def bananas(s):
+    result = set()
+    pattern = 'banana'
+    for combo in combos(enumerate(s), 6):
+        word = ['-' for _ in range(len(s))]
+        z = 0
+        for i, letter in combo:
+            if letter == pattern[z]:
+                word[i] = letter
+                z += 1
             else:
-                right_s_list = bananas(s[si + 1:], word[1:])
-                for right_s in right_s_list:
-                    ret.append(left_s + right_s)
-    return ret
+                break
+        if z == len(pattern):
+            result.add(''.join(word))
+    return result
 
 
 if __name__ == '__main__':
-    for s in bananas('bananaaa', 'banana'):
-        print(s)
+    s = input()
+    print(bananas(s))
